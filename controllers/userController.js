@@ -4,11 +4,16 @@ import passwordHash from "password-hash"
 
 export function persist(req, res) {
 
-    const regex = /^0\d{9}$/;
-    if (!regex.test(req.body.whatsappNo)) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneNoRegex = /^0\d{9}$/;
+
+    if (!emailRegex.test(req.body.email)) {
+        return res.status(400).json({ message: "Please enter valid email address" })
+    }
+    if (!phoneNoRegex.test(req.body.whatsappNo)) {
         return res.status(400).json({ message: "Please enter valid whatsapp number" })
     }
-    if (!regex.test(req.body.phoneNo)) {
+    if (!phoneNoRegex.test(req.body.phoneNo)) {
         return res.status(400).json({ message: "Please enter valid phone number" })
     }
 
