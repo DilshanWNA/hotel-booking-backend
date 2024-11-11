@@ -76,27 +76,42 @@ export function login(req, res) {
         })
 }
 
+export function retrieve(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required"});
+    }
 
+    User.find()
+        .then((users) => {
+            if (users.length === 0) {
+                return res.status(404).json({ message: "No users found" });
+            }
+            res.status(200).json(users);
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
 
 // Check if user exists
-export function isHaveUser(req){
-    if(req.user){
+export function isHaveUser(req) {
+    if (req.user) {
         return true
     }
     return false
 }
 
 // Check if the existing user is an admin
-export function isAdmin(req){
-    if(req.user && req.user.type == "admin"){
+export function isAdmin(req) {
+    if (req.user && req.user.type == "admin") {
         return true
     }
     return false
 }
 
 // Check if the existing user is a normal user
-export function isUser(req){
-    if(req.user && req.user.type == "user"){
+export function isUser(req) {
+    if (req.user && req.user.type == "user") {
         return true
     }
     return false
