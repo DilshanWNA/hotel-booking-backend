@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 import passwordHash from "password-hash"
+import jwt from "jsonwebtoken"
 
 
 export function persist(req, res) {
@@ -39,4 +40,38 @@ export function persist(req, res) {
             res.status(500).json({ message: "User Registration Fail", error: err })
         }
     })
+}
+
+export function login(req, res) {
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(req.body.email)) {
+        return res.status(400).json({ message: "Please enter valid email address" })
+    }
+
+    User.findOne({ email: req.body.email })
+        .then((user) => {
+            if (!user || user.disabled) {
+                return res.status(400).json({ message: "User not found" });
+            }
+            if (!passwordHash.verify(req.body.password, user.password)) {
+                return res.status(400).json({ message: "Password is incorrect" });
+            }
+
+            const payload = {
+                email: user.email,
+                firstName: user.firstName,
+                type: user.type
+            }
+            const token = jwt.sign(payload, process.env.JWT_KEY) // jWT token generate
+            res.status(201).json({
+                message: "User Login Successful",
+                user: payload,
+                token: token
+            })
+
+        }).catch((err) => {
+            res.status(500).json({ message: "User Login Fail", error: err })
+        })
 }
