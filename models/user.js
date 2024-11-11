@@ -23,14 +23,14 @@ const userSchema = mongoose.Schema({
         required: true
     },
     whatsappNo: {
-        type: Number,
+        type: String,
         required: true,
         unique: true
     },
     phoneNo: {
-        type: Number,
+        type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     image: {
         type: String,
@@ -50,3 +50,5 @@ const userSchema = mongoose.Schema({
         default: "user"
     }
 })
+
+export default mongoose.model("user", userSchema);
