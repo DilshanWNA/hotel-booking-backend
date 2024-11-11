@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import mongoose from "mongoose";
 import userRouter from "./routers/userRouter.js";
 import bodyParser from "body-parser";
+import authenticate from "./utils/authentication.js";
 
 const app = express();
 
@@ -11,6 +12,9 @@ app.use(bodyParser.json())
 
 // Database connection
 mongoose.connect(process.env.CONNECTION_STRING).then(() => console.log("Database connection success")).catch(() => console.log("Database connection fail"));
+
+// Authentication
+app.use(authenticate);
 
 // Routers
 app.use("/user", userRouter);
