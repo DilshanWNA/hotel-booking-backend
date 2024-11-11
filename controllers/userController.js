@@ -75,3 +75,29 @@ export function login(req, res) {
             res.status(500).json({ message: "User Login Fail", error: err })
         })
 }
+
+
+
+// Check if user exists
+export function isHaveUser(req){
+    if(req.user){
+        return true
+    }
+    return false
+}
+
+// Check if the existing user is an admin
+export function isAdmin(req){
+    if(req.user && req.user.type == "admin"){
+        return true
+    }
+    return false
+}
+
+// Check if the existing user is a normal user
+export function isUser(req){
+    if(req.user && req.user.type == "user"){
+        return true
+    }
+    return false
+}
