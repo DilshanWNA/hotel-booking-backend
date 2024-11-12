@@ -78,7 +78,7 @@ export function login(req, res) {
 
 export function retrieve(req, res) {
     if (!isAdmin(req)) {
-        return res.status(401).json({ message: "Admin access required"});
+        return res.status(401).json({ message: "Admin access required" });
     }
 
     User.find()
@@ -89,6 +89,19 @@ export function retrieve(req, res) {
             res.status(200).json(users);
         })
         .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
+
+export function update(req, res) {
+    if (!isHaveUser(req)) {
+        return res.status(401).json({ message: "Registered user access required" });
+    }
+
+    User.updateOne({ email: req.body.email }, req.body)
+        .then(() => {
+            res.status(200).json({ message: "User Update Successful" });
+        }).catch((err) => {
             res.status(500).json({ message: "Server error occurred", error: err.message });
         })
 }
