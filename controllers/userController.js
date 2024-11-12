@@ -62,6 +62,7 @@ export function login(req, res) {
             const payload = {
                 email: user.email,
                 firstName: user.firstName,
+                phoneNo: user.phoneNo,
                 type: user.type
             }
             const token = jwt.sign(payload, process.env.JWT_KEY) // jWT token generate
@@ -119,6 +120,25 @@ export function remove(req, res) {
             res.status(200).json({ message: "User Delete Successful" });
         }).catch((err) => {
             res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
+
+export function findByPhoneNo(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    User.findOne({ phoneNo: req.params.phoneNo })
+        .then((user) => {
+            if (user) {
+                res.status(200).json({
+                    message: "User found",
+                    user: user
+                });
+            }
+            else {
+                res.status(404).json({ message: "User not found" });
+            }
         })
 }
 
