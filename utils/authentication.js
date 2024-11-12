@@ -7,8 +7,6 @@ export default function authenticate(req, res, next) {
         jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
             if (decoded) {
                 req.user = decoded;
-                console.log(decoded);
-
                 next();
             }
             else if (err) {
