@@ -37,3 +37,17 @@ export function retrieve(req, res) {
             res.status(500).json({ message: "Server error occurred", error: err.message });
         })
 }
+
+export function update(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    Room.updateOne({ number: req.body.number }, req.body)
+        .then(() => {
+            res.status(200).json({ message: "Room Update Successful" });
+        })
+        .catch(() => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
