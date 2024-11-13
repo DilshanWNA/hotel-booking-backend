@@ -65,3 +65,19 @@ export function remove(req, res) {
             res.status(500).json({ message: "Server error occurred", error: err.message });
         })
 }
+
+export function findByNumber(req, res) {
+    Room.findOne({ number: req.params.number })
+        .then((room) => {
+            if (!room) {
+                return res.status(404).json({ message: "Room Not found" });
+            }
+            res.status(200).json({
+                message: "Room found",
+                room: room
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
