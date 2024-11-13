@@ -24,3 +24,16 @@ export function persist(req, res) {
 
         })
 }
+
+export function retrieve(req, res) {
+    Room.find()
+        .then((rooms) => {
+            if (rooms.length === 0) {
+                return res.status(404).json({ message: "Rooms not found" });
+            }
+            res.status(200).json(rooms)
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
