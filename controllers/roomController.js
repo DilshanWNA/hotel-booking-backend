@@ -51,3 +51,17 @@ export function update(req, res) {
             res.status(500).json({ message: "Server error occurred", error: err.message });
         })
 }
+
+export function remove(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(401).json({ message: "Admin access required" });
+    }
+
+    Room.deleteOne({ number: req.params.number })
+        .then(() => {
+            res.status(200).json({ message: "Room Delete Successful" });
+        })
+        .catch(() => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
