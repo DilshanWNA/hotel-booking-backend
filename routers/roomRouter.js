@@ -1,11 +1,13 @@
 import express from 'express'
-import { findByNumber, persist, remove, retrieve, update } from '../controllers/roomController.js';
+import { findByCategory, findByNumber, persist, remove, retrieve, update } from '../controllers/roomController.js';
 
 const roomRouter = express.Router();
 
 roomRouter.post("/", persist);
 
-roomRouter.get("/:number", findByNumber);
+roomRouter.get("/number/:number", findByNumber);
+
+roomRouter.get("/category/:category", findByCategory);
 
 roomRouter.get("/", retrieve);
 
