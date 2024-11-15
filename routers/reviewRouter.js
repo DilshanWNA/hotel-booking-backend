@@ -1,9 +1,11 @@
 import express from 'express'
-import { persist, remove, retrieve, update } from '../controllers/reviewController.js';
+import { findByEmail, persist, remove, retrieve, update } from '../controllers/reviewController.js';
 
 const reviewRouter = express.Router();
 
 reviewRouter.post("/", persist);
+
+reviewRouter.get("/:email", findByEmail);
 
 reviewRouter.get("/", retrieve);
 
