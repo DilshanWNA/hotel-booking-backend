@@ -1,5 +1,5 @@
 import Review from "../models/review.js";
-import { isUser } from "./userController.js";
+import { isHaveUser, isUser } from "./userController.js";
 
 
 export function persist(req, res) {
@@ -35,6 +35,23 @@ export function retrieve(req, res) {
                 return res.status(404).json({ message: "Review not found" });
             }
             res.status(200).json(reviews);
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Server error occurred", error: err.message });
+        })
+}
+
+export function update(req, res) {
+    if (!isHaveUser(req)) {
+        return res.status(401).json({ message: "User access required" });
+    }
+    if (isUser(req) && req.user.email != req.body.email) {
+        return res.status(401).json({ message: "Wrong User" });
+    }
+
+    Review.updateOne({ id: req.body.id }, req.body)
+        .then(() => {
+            res.status(200).json({ message: "Review Update Successful" });
         })
         .catch((err) => {
             res.status(500).json({ message: "Server error occurred", error: err.message });
